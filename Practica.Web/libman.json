@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jquery@3.6.3",
+      "destination": "wwwroot/jquery/"
+    },
+    {
+      "library": "bootstrap-sweetalert@1.0.1",
+      "destination": "wwwroot/bootstrap-sweetalert/"
+    },
+    {
+      "library": "limonte-sweetalert2@11.6.16",
+      "destination": "wwwroot/limonte-sweetalert2/"
+    }
+  ]
+}

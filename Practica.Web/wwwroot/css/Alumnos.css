@@ -1,0 +1,100 @@
+﻿.formulario {
+    text-align: center;
+    margin: 10px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
+    border: 1px dashed gray;
+    border-radius: 5px;
+}
+
+.btnSubmit {
+    appearance: button;
+    background-color: cornflowerblue;
+    border: 1px black;
+    color: white;
+    border-radius: 5px;
+}
+
+.tabla {
+    border-collapse: collapse;
+    width: 75%;
+    margin: auto;
+}
+
+.tabla td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+td {
+    text-align: left;
+}
+
+.tabla tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.col-alumnoId {
+    width: 10px;
+}
+
+.col-nombre {
+    width: 100px;
+}
+
+.col-apellidos {
+    width: 200px;
+}
+
+.col-cursoId {
+    width: 200px;
+}
+
+.btnAgregar {
+    background-color: rgba(0,176,92);
+    color: white;
+    width: 140px;
+}
+
+.btnActualizar {
+    background-color: #FF7F0D;
+    color: white;
+    width: 140px;
+}
+
+.btnEliminar {
+    background-color: rgba(224,54,38);
+    color: white;
+    width: 140px;
+}
+.espaciado {
+    width:50px;
+}
+
+#id, #idMod {
+    width:100px;
+}
+
+#curso, #cursoMod {
+    width: 300px;
+}
+
+#email, #emailMod {
+    width: 300px;
+}
+
+form .error {
+    color: #ff0000;
+}
+form label.error {
+    display: block;
+}
+
+.highlight {
+    border: 2px solid gray;
+    cursor: pointer;
+}
+
+.selected td {
+    background-color: #AFEFEF !important;
+    font-weight: bold;
+}

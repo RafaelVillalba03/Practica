@@ -1,0 +1,29 @@
+﻿#btnAlumnos {
+    background-color: rgba(0,123,255);
+    color: white;
+    margin: 4px 4px 4px 4px;
+}
+
+#btnCursos {
+    background-color: rgba(108,117,125);
+    color: white;
+    margin: 4px 4px 4px 4px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+a {
+    text-decoration: none ;
+}

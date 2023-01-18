@@ -1,0 +1,350 @@
+﻿@model Practica.Web.ViewModel.CursosViewModel
+@section Stylesheets {
+    <script src="~/lib/jquery-pagination/table-pagination.js"></script>
+    <script src="~/limonte-sweetalert2/sweetalert2.all.js"></script>
+    <script src="~/limonte-sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="~/limonte-sweetalert2/sweetalert2.js"></script>
+    <script src="~/limonte-sweetalert2/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="~/css/Cursos.css" asp-append-version="true" />
+    <link href="~/limonte-sweetalert2/sweetalert2.css" rel="stylesheet" />
+    <link href="~/limonte-sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+}
+<div class="formulario">
+    <div>
+        <h1>Cursos</h1>
+    </div>
+    <div>
+        <form id="idsubmit-form-cursos" action="" method="POST">
+            <div class="my-5">
+                <table class="mx-auto">
+                    <tr>
+                        <td>Curso Id:</td>
+                        <td><input type="text" id="idcursoId" name="cursoid" maxlength="8"></td>    @*El campo name tiene que llamarse igual que el campo CursoId de la clase Curso en el controlador, si no no reconoce el param*@
+                        <td class="espaciado"></td>
+                        <td>Nombre:</td>
+                        <td><input type="text" id="idcursoNombre" name="nombre" maxlength="50"></td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <a class="btnSubmit btn" asp-controller="Cursos" asp-action="Index">Limpiar</a>
+                <button type="submit" class="btnSubmit btn">Buscar</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="refreshDiv">
+    <table id="idTablaCursos" class="tabla my-5">
+        <tr>
+            <th class="col-cursoId">Curso Id</th>
+            <th class="col-nombre">Nombre</th>
+        </tr>
+        @foreach (var curso in Model.Cursos)
+        {
+            <tr onclick="getCursos(@curso.CursoId)">
+                <td class="col-cursoId">@curso.CursoId</td>
+                <td class="col-nombre">@curso.Nombre</td>
+            </tr>
+        }
+    </table>
+</div>
+<div class="formulario">
+    <div class="container-fluid">
+        <div class="row tabla my-3">
+            <div class="col-3 mx-auto">
+                <button class="btn btnAgregar" onclick="PostCurso()">
+                    <img src="~/images/addIcon.svg" alt="Add Icon" />
+                    Agregar
+                </button>
+            </div>
+            <div class="col-3 mx-auto">
+                <button class="btn btnActualizar" onclick="UpdateCurso()">
+                    <img src="~/images/syncIcon.svg" alt="Update Icon" />
+                    Actualizar
+                </button>
+            </div>
+            <div class="col-3 mx-auto">
+                <button class="btn btnEliminar" onclick="DeleteCurso()">
+                    <img src="~/images/deleteIcon.svg" alt="Delete Icon" />
+                    Borrar
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <form id="idajax-form-cursos">
+        <div class="my-5">
+            <table class="mx-auto">
+                <tr>
+                    <td>Curso Id:</td>
+                    <td><input type="text" id="idcursoModId" name="nmcursoModId" maxlength="8" value=""></td>
+                    <td class="espaciado"></td>
+                    <td>Nombre:</td>
+                    <td><input type="text" id="idcursoModNombre" name="nmcursoModNombre" maxlength="50" value=""></td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</div>
+@*<section class="modal hidden">
+    <div class="flex">
+        <button class="btn-close">⨉</button>
+    </div>
+    <div>
+        <h3>Stay in touch</h3>
+        <p>
+            This is a dummy newsletter form so don't bother trying to test it. Not
+            that I expect you to, anyways. :)
+        </p>
+    </div>
+</section>*@
+
+
+<script>
+    // El problema está en que únicamente produce la validación cuando se modifica el input text.
+    // La validación debería hacerse, a parte de que el input cambie, cada vez que presione algún boton de agregar, modificar o eliminar.
+    $("#idsubmit-form-cursos").validate({
+        rules: {
+            cursoid: {
+                number: true,
+            }
+        },
+        messages: {
+            cursoid: "Solo se permiten números"
+        }
+    });
+    function ModifyTableCursos() {
+        $('#idTablaCursos').createTablePagination({
+            rowPerPage: 10,
+        });
+        var table = document.getElementById("idTablaCursos");
+        var rows = table.getElementsByTagName("tr");
+        for (var i = 0; i < rows.length; i++) {
+            rows[i].addEventListener("mouseover", function () {
+                this.classList.add("highlight");
+            });
+            rows[i].addEventListener("mouseout", function () {
+                this.classList.remove("highlight");
+            });
+            rows[i].addEventListener("click", function () {
+                for (var j = 0; j < rows.length; j++) {
+                    rows[j].classList.remove("selected");
+                }
+                this.classList.add("selected");
+            });
+
+        }
+    };
+    $(ModifyTableCursos());
+
+    //$(function () {
+    //    var table = document.getElementById("idTablaCursos");
+    //    var rows = table.getElementsByTagName("tr");
+    //    for (var i = 0; i < rows.length; i++) {
+    //        rows[i].addEventListener("mouseover", function () {
+    //            this.classList.add("highlight");
+    //        });
+    //        rows[i].addEventListener("mouseout", function () {
+    //            this.classList.remove("highlight");
+    //        });
+    //        rows[i].addEventListener("click", function () {
+    //            for (var j = 0; j < rows.length; j++) {
+    //                rows[j].classList.remove("selected");
+    //            }
+    //            this.classList.add("selected");
+    //        });
+
+    //    }
+    //});
+
+    $("#idajax-form-cursos").validate({
+        rules: {
+            nmcursoModNombre: {
+                required: true,
+                minlength: 5
+            },
+            nmcursoModId: {
+                required: true,
+                number: true
+            }
+        },
+        messages: {
+            nmcursoModNombre: {
+                required: "Añade el nombre del curso",
+                minlength: "Al menos debe tener 5 caracteres",
+            },
+            nmcursoModId: {
+                required: "Añade el id del curso",
+                number: "Solo se permiten números",
+            },
+        }
+    });
+    class CursoDTO {
+        constructor(CursoId, Nombre) {
+            this.CursoId = CursoId;
+            this.Nombre = Nombre;
+        }
+    }
+    function getCursos(cursoId) {
+        $.ajax({
+            type: "GET",
+            url: `https://localhost:7280/api/Cursos/id/${cursoId}`,
+            dataType: "json",
+            success: function (response) {
+                copiarCurso(response);
+            },
+            fail: function (response) {
+                console.log(failMessage);
+            },
+            error: function (jqXHR, textStatus, errorThrow) {
+                console.log(errorThrow);
+            }
+        });
+    }
+    function copiarCurso(curso) {
+        $('#idcursoModId').val(curso.cursoId);
+        $('#idcursoModNombre').val(curso.nombre);
+        $('#idajax-form-cursos').valid();
+    }
+    function PostCurso() {
+        //if ($("#idcursoModId").attr("aria-invalid") == 'false' && $("#idcursoModNombre").attr("aria-invalid") == 'false') {
+        if ($("#idajax-form-cursos").validate().form()) {
+            // Primero creo el objeto Curso con los datos del input text
+            const cursoDTO = { CursoId: 0, Nombre: $('#idcursoModNombre').val() }  // el valor cursoId = 0 es necesario para que el controlador lo trate como null
+            // y pueda realizar el post creando un nuevo cursoId automático tal y como fue
+            $.ajax({                                                        // creada la base de datos.
+                type: "POST",
+                url: "https://localhost:7280/api/Cursos",
+                dataType: "json",
+                data: JSON.stringify(cursoDTO),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: `El curso ${cursoDTO.Nombre} ha sido creado`
+                    });
+                    $("#refreshDiv").load(location.href + " #refreshDiv", function () {
+                        ModifyTableCursos();
+                    });
+                    ClearForm();
+                },
+                fail: function (response) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: `¡La solicitud ha fallado!`
+                    });
+                    ClearForm();
+                },
+                error: function (jqXHR, textStatus, errorThrow) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops ha habido un error...',
+                        text: `Error message: ${jqXHR.responseText}`
+                    });
+                    ClearForm();
+                }
+            });
+        }
+        else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Introduce correctamente los campos del curso',
+            });
+        }
+    };
+    function UpdateCurso() {
+        //if ($("#idcursoModId").attr("aria-invalid") == 'false' && $("#idcursoModNombre").attr("aria-invalid") == 'false') {
+        if ($("#idajax-form-cursos").validate().form()) {
+            const cursoDTO = { CursoId: parseInt($('#idcursoModId').val()), Nombre: $('#idcursoModNombre').val() }
+            $.ajax({
+                type: "PUT",
+                url: `https://localhost:7280/api/Cursos/${cursoDTO.CursoId}`,
+                dataType: "json",
+                data: JSON.stringify(cursoDTO),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: `El curso ha sido actualizado`
+                    });
+                    $("#refreshDiv").load(location.href + " #refreshDiv", function () {
+                        ModifyTableCursos();
+                    });
+                    ClearForm();
+                },
+                fail: function (response) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: `!Ha fallado la solicitud!`
+                    });
+                    clearform();
+                },
+                error: function (jqXHR, textStatus, errorThrow) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops ha habido un error...',
+                        text: `Error message: ${jqXHR.responseText}`
+                    });
+                    ClearForm();
+                }
+            });
+        }
+        else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Introduce correctamente los campos del curso',
+            });
+        }
+    }
+    function DeleteCurso() {
+        //if ($("#idcursoModId").attr("aria-invalid") == 'false' && $("#idcursoModNombre").attr("aria-invalid") == 'false') {
+        if ($("#idajax-form-cursos").validate().form()) {
+            const cursoDTO = { CursoId: parseInt($('#idcursoModId').val()), Nombre: $('#cursoNombreModid').val() }
+            $.ajax({
+                type: "DELETE",
+                url: `https://localhost:7280/api/Cursos/${cursoDTO.CursoId}`,
+                dataType: "json",
+                data: { id: cursoDTO.CursoId },
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: `El curso ha sido borrado`
+                    });
+                    $("#refreshDiv").load(location.href + " #refreshDiv", function () {
+                        ModifyTableCursos();
+                    });
+                    ClearForm();
+                },
+                fail: function (response) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: `¡El curso no existe!`
+                    });
+                    ClearForm();
+                },
+                error: function (jqXHR, textStatus, errorThrow) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops ha habido un error...',
+                        text: `Error message: ${jqXHR.responseText}`
+                    });
+                    ClearForm();
+                }
+            });
+        }
+        else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Introduce correctamente los campos del curso',
+            });
+        }
+    }
+    function ClearForm() {
+        $('#idcursoModId').val('');
+        $('#idcursoModNombre').val('');
+    }
+</script>
