@@ -42,7 +42,7 @@
         @foreach (var curso in Model.Cursos)
         {
             <tr onclick="getCursos(@curso.CursoId)">
-                <td class="col-cursoId">@curso.CursoId</td>
+                <td class="col-cursoId"><a href="#" onclick='MostrarModalDetalles(@Html.Raw(Json.Serialize(curso)))'>@curso.CursoId</a></td>
                 <td class="col-nombre">@curso.Nombre</td>
             </tr>
         }
@@ -52,7 +52,7 @@
     <div class="container-fluid">
         <div class="row tabla my-3">
             <div class="col-3 mx-auto">
-                <button class="btn btnAgregar" onclick="PostCurso()">
+                <button class="btn btnAgregar" onclick="MostrarModalAñadir()">
                     <img src="~/images/addIcon.svg" alt="Add Icon" />
                     Agregar
                 </button>
@@ -86,23 +86,53 @@
         </div>
     </form>
 </div>
-@*<section class="modal hidden">
-    <div class="flex">
-        <button class="btn-close">⨉</button>
-    </div>
-    <div>
-        <h3>Stay in touch</h3>
-        <p>
-            This is a dummy newsletter form so don't bother trying to test it. Not
-            that I expect you to, anyways. :)
-        </p>
-    </div>
-</section>*@
 
+<div id="idModal" class="visually-hidden">
+    <div id="idNavbarModal">
+        <table>
+            <tr>
+                <td>
+                    <h3></h3>
+                </td>
+                <td>
+                    <button id="idCloseBtnModal" onclick="OcultarModal()">X</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="idModalContentDetalles" class="visually-hidden modal-content-class">   @*Cotenido Modal Detalles*@
+        <form id="idModalContentForm" class="formulario-modal-detalles">
+            <table>
+                <tr>
+                    <td>Curso Id:</td>
+                    <td><input type="text" id="idModalIdCursosDetalles" name="nmModalIdCursosDetalles" class="input-modal-cursosId"></td>
+                </tr>
+                <tr>
+                    <td>Nombre:</td>
+                    <td><input type="text" id="idModalNombreCursosDetalles" name="nmModalNombreCursosDetalles" class="input-modal-nombre"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div id="idModalContentAgregar" class="visually-hidden modal-content-class">       @*Cotenido Modal Agregar*@
+        <form id="idModalContentForm" class="formulario-modal-agregar">
+            <table>
+                <tr>
+                    <td>Curso Id:</td>
+                    <td><input type="text" id="idModalIdCursosAgregar" name="nmModalIdCursosAgregar" class="input-modal-cursosId" readonly></td>
+                </tr>
+                <tr>
+                    <td>Nombre:</td>
+                    <td><input type="text" id="idModalNombreCursosAgregar" name="nmModalNombreCursosAgregar" class="input-modal-nombre"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+<div id="modal-overlay" class="visually-hidden"></div>
 
 <script>
-    // El problema está en que únicamente produce la validación cuando se modifica el input text.
-    // La validación debería hacerse, a parte de que el input cambie, cada vez que presione algún boton de agregar, modificar o eliminar.
     $("#idsubmit-form-cursos").validate({
         rules: {
             cursoid: {
@@ -113,6 +143,60 @@
             cursoid: "Solo se permiten números"
         }
     });
+
+    function MostrarModalDetalles(curso) {
+        var modal = document.getElementById("idModal");
+        var modalContentDetalles = document.getElementById("idModalContentDetalles");
+        var modalContentAgregar = document.getElementById("idModalContentAgregar");
+        var overlay = document.getElementById("modal-overlay");
+        var navBarModal = document.getElementById('idNavbarModal');
+        var titulo = navBarModal.getElementsByTagName('h3');
+
+        titulo[0].innerHTML = 'Detalles del curso';
+
+        modal.classList.remove("visually-hidden");
+        modalContentDetalles.classList.remove("visually-hidden");
+        modalContentAgregar.classList.add("visually-hidden");
+        overlay.classList.remove("visually-hidden");
+
+
+        $('#idModalIdCursosDetalles').val(curso.cursoId);
+        $('#idModalNombreCursosDetalles').val(curso.nombre);
+
+    }
+
+    function MostrarModalAñadir() {
+        var modal = document.getElementById("idModal");
+        var modalContentDetalles = document.getElementById("idModalContentDetalles");
+        var modalContentAgregar = document.getElementById("idModalContentAgregar");
+        var overlay = document.getElementById("modal-overlay");
+        var navBarModal = document.getElementById('idNavbarModal');
+        var titulo = navBarModal.getElementsByTagName('h3');
+
+        titulo[0].innerHTML = 'Agregar curso';
+
+        modal.classList.remove("visually-hidden");
+        modalContentDetalles.classList.add("visually-hidden");
+        modalContentAgregar.classList.remove("visually-hidden");
+        overlay.classList.remove("visually-hidden");
+
+        $('#idModalIdCursosAgregar').val('');
+        $('#idModalNombreCursosAgregar').val('');
+
+    }
+
+    function OcultarModal() {
+        var modal = document.getElementById("idModal");
+        var overlay = document.getElementById("modal-overlay");
+        var modalContentDetalles = document.getElementById("idModalContentDetalles");
+        var modalContentAgregar = document.getElementById("idModalContentAgregar");
+
+        modal.classList.add("visually-hidden");
+        overlay.classList.add("visually-hidden");
+        modalContentDetalles.classList.add("visually-hidden");
+        modalContentAgregar.classList.add("visually-hidden");
+    }
+
     function ModifyTableCursos() {
         $('#idTablaCursos').createTablePagination({
             rowPerPage: 10,
