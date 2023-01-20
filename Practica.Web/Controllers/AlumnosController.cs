@@ -67,16 +67,16 @@ namespace Practica.Web.Controllers
             }
             List<Alumno> alumnosFiltrados = listaAlumnos.Where
             (c => (c.Id == alumnoId || alumnoId == 0)
-            && (nombre == null || c.Nombre.Contains(nombre))
+            && (string.IsNullOrEmpty(nombre) || c.Nombre.Contains(nombre))
             && (string.IsNullOrEmpty(apellido1) || c.Apellido1.Contains(apellido1))
-            && (apellido2 == null || c.Apellido2.Contains(apellido2))
+            && (string.IsNullOrEmpty(apellido2) || c.Apellido2.Contains(apellido2))
             && (c.Sexo == sexo || sexo == '-')
-            && (localidad == null || c.Localidad.Contains(localidad))
-            && (provincia == null || c.Provincia.Contains(provincia))
-            && (telefono == null || c.Telefono.Contains(telefono))
-            && (email == null || c.Email.Contains(email))
+            && (string.IsNullOrEmpty(localidad) || c.Localidad.Contains(localidad))
+            && (string.IsNullOrEmpty(provincia) || c.Provincia.Contains(provincia))
+            && (string.IsNullOrEmpty(telefono) || c.Telefono.Contains(telefono))
+            && (string.IsNullOrEmpty(email) || c.Email.Contains(email))
             && (c.FechaNacimiento == fechaNacimiento || fechaNacimiento == new DateTime(0001, 01, 01))
-            && (direccion == null || c.Direccion.Contains(direccion))
+            && (string.IsNullOrEmpty(direccion) || c.Direccion.Contains(direccion))
             && (c.CursoId == cursoId || cursoId == 0)
             ).ToList();
 

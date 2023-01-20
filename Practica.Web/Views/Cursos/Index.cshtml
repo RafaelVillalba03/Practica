@@ -58,13 +58,13 @@
                 </button>
             </div>
             <div class="col-3 mx-auto">
-                <button class="btn btnActualizar" onclick="UpdateCurso()">
+                <button class="btn btnActualizar" onclick="ObtenerCursoActualizarModal('Actualizar')">
                     <img src="~/images/syncIcon.svg" alt="Update Icon" />
                     Actualizar
                 </button>
             </div>
             <div class="col-3 mx-auto">
-                <button class="btn btnEliminar" onclick="DeleteCurso()">
+                <button class="btn btnEliminar" onclick="ObtenerCursoActualizarModal('Eliminar')">
                     <img src="~/images/deleteIcon.svg" alt="Delete Icon" />
                     Borrar
                 </button>
@@ -72,7 +72,7 @@
 
         </div>
     </div>
-    <form id="idajax-form-cursos">
+    @*<form id="idajax-form-cursos">
         <div class="my-5">
             <table class="mx-auto">
                 <tr>
@@ -84,9 +84,9 @@
                 </tr>
             </table>
         </div>
-    </form>
+    </form>*@
 </div>
-
+    @* ---- MODAL ---- *@
 <div id="idModal" class="visually-hidden">
     <div id="idNavbarModal">
         <table>
@@ -100,34 +100,31 @@
             </tr>
         </table>
     </div>
-    <div id="idModalContentDetalles" class="visually-hidden modal-content-class">   @*Cotenido Modal Detalles*@
-        <form id="idModalContentForm" class="formulario-modal-detalles">
+    <div id="idModalContent" class="modal-content-class">
+        <form id="idModalContentForm">
             <table>
                 <tr>
                     <td>Curso Id:</td>
-                    <td><input type="text" id="idModalIdCursosDetalles" name="nmModalIdCursosDetalles" class="input-modal-cursosId"></td>
+                    <td><input type="text" id="idModalIdCursos" name="nmModalIdCursos"></td>
                 </tr>
                 <tr>
                     <td>Nombre:</td>
-                    <td><input type="text" id="idModalNombreCursosDetalles" name="nmModalNombreCursosDetalles" class="input-modal-nombre"></td>
+                    <td><input type="text" id="idModalNombreCursos" name="nmModalNombreCursos"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div id="idModalButtonAñadir" onclick="PostCurso()" class="boton-modal-class btn visually-hidden">Guardar</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div id="idModalButtonActualizar" onclick="UpdateCurso()" class="boton-modal-class btn visually-hidden">Actualizar</div>
+                    </td>
                 </tr>
             </table>
         </form>
     </div>
-    <div id="idModalContentAgregar" class="visually-hidden modal-content-class">       @*Cotenido Modal Agregar*@
-        <form id="idModalContentForm" class="formulario-modal-agregar">
-            <table>
-                <tr>
-                    <td>Curso Id:</td>
-                    <td><input type="text" id="idModalIdCursosAgregar" name="nmModalIdCursosAgregar" class="input-modal-cursosId" readonly></td>
-                </tr>
-                <tr>
-                    <td>Nombre:</td>
-                    <td><input type="text" id="idModalNombreCursosAgregar" name="nmModalNombreCursosAgregar" class="input-modal-nombre"></td>
-                </tr>
-            </table>
-        </form>
-    </div>
+
 </div>
 
 <div id="modal-overlay" class="visually-hidden"></div>
@@ -146,8 +143,9 @@
 
     function MostrarModalDetalles(curso) {
         var modal = document.getElementById("idModal");
-        var modalContentDetalles = document.getElementById("idModalContentDetalles");
-        var modalContentAgregar = document.getElementById("idModalContentAgregar");
+        var botonGuardar = document.getElementById("idModalButtonAñadir");
+        var botonActualizar = document.getElementById("idModalButtonActualizar");
+        var modalContent = document.getElementById("idModalContent");
         var overlay = document.getElementById("modal-overlay");
         var navBarModal = document.getElementById('idNavbarModal');
         var titulo = navBarModal.getElementsByTagName('h3');
@@ -155,46 +153,113 @@
         titulo[0].innerHTML = 'Detalles del curso';
 
         modal.classList.remove("visually-hidden");
-        modalContentDetalles.classList.remove("visually-hidden");
-        modalContentAgregar.classList.add("visually-hidden");
         overlay.classList.remove("visually-hidden");
+        botonGuardar.classList.add("visually-hidden");
+        botonActualizar.classList.add("visually-hidden");
 
 
-        $('#idModalIdCursosDetalles').val(curso.cursoId);
-        $('#idModalNombreCursosDetalles').val(curso.nombre);
+        modalContent.classList.remove('formulario-modal-añadir');
+        modalContent.classList.add('formulario-modal-detalles');
+
+        $('#idModalIdCursos').val(curso.cursoId);
+        $('#idModalNombreCursos').val(curso.nombre);
 
     }
 
     function MostrarModalAñadir() {
         var modal = document.getElementById("idModal");
-        var modalContentDetalles = document.getElementById("idModalContentDetalles");
-        var modalContentAgregar = document.getElementById("idModalContentAgregar");
+        var modalContent = document.getElementById("idModalContent");
+        var botonGuardar = document.getElementById("idModalButtonAñadir");
+        var botonActualizar = document.getElementById("idModalButtonActualizar");
         var overlay = document.getElementById("modal-overlay");
         var navBarModal = document.getElementById('idNavbarModal');
         var titulo = navBarModal.getElementsByTagName('h3');
 
-        titulo[0].innerHTML = 'Agregar curso';
+        titulo[0].innerHTML = 'Añadir curso';
 
         modal.classList.remove("visually-hidden");
-        modalContentDetalles.classList.add("visually-hidden");
-        modalContentAgregar.classList.remove("visually-hidden");
         overlay.classList.remove("visually-hidden");
+        botonGuardar.classList.remove("visually-hidden");
+        botonActualizar.classList.add("visually-hidden");
 
-        $('#idModalIdCursosAgregar').val('');
-        $('#idModalNombreCursosAgregar').val('');
+        modalContent.classList.remove('formulario-modal-detalles');
+        modalContent.classList.add('formulario-modal-añadir');
 
+        $('#idModalIdCursos').val('');
+        $('#idModalNombreCursos').val('');
+
+    }
+    function MostrarModalActualizar(curso) {
+        var modal = document.getElementById("idModal");
+        var modalContent = document.getElementById("idModalContent");
+        var botonGuardar = document.getElementById("idModalButtonAñadir");
+        var botonActualizar = document.getElementById("idModalButtonActualizar");
+        var overlay = document.getElementById("modal-overlay");
+        var navBarModal = document.getElementById('idNavbarModal');
+        var titulo = navBarModal.getElementsByTagName('h3');
+
+        titulo[0].innerHTML = 'Actualizar curso';
+
+        modal.classList.remove("visually-hidden");
+        overlay.classList.remove("visually-hidden");
+        botonGuardar.classList.add("visually-hidden");
+        botonActualizar.classList.remove("visually-hidden");
+
+        modalContent.classList.remove('formulario-modal-detalles');
+        modalContent.classList.add('formulario-modal-añadir');
+
+        $('#idModalIdCursos').val(curso.cursoId);
+        $('#idModalNombreCursos').val(curso.nombre);
+    }
+    function ObtenerCursoActualizarModal(accion) {
+        var table = document.getElementById("idTablaCursos");
+        var rows = table.getElementsByTagName("tr");
+        var selectedRowEncontrada = false;
+        for (var i = 0; i < rows.length; i++) {
+            if (rows[i].classList.contains('selected')) {
+                selectedRowEncontrada = true;
+                var cursoId = rows[i].getElementsByTagName('a')[0].innerText;
+                if (accion == 'Actualizar') {
+                    $.ajax({
+                        type: "GET",
+                        url: `https://localhost:7280/api/Cursos/id/${cursoId}`,
+                        dataType: "json",
+                        success: function (response) {
+                            console.log(response);
+                            MostrarModalActualizar(response);
+                        },
+                        fail: function (response) {
+                            console.log(response);
+                        },
+                        error: function (jqXHR, textStatus, errorThrow) {
+                            console.log(jqXHR.responseText)
+                        }
+                    });
+                }
+                else if (accion == 'Eliminar') {
+                    DeleteCurso(cursoId);
+                }
+                break;
+            }
+        }
+        if (!selectedRowEncontrada) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Selecciona un curso',
+            });
+        }
     }
 
     function OcultarModal() {
         var modal = document.getElementById("idModal");
         var overlay = document.getElementById("modal-overlay");
-        var modalContentDetalles = document.getElementById("idModalContentDetalles");
-        var modalContentAgregar = document.getElementById("idModalContentAgregar");
+        var botonGuardar = document.getElementById("idModalButtonAñadir");
+        var botonActualizar = document.getElementById("idModalButtonActualizar");
 
         modal.classList.add("visually-hidden");
         overlay.classList.add("visually-hidden");
-        modalContentDetalles.classList.add("visually-hidden");
-        modalContentAgregar.classList.add("visually-hidden");
+        botonGuardar.classList.add("visually-hidden");
+        botonActualizar.classList.add("visually-hidden");
     }
 
     function ModifyTableCursos() {
@@ -241,26 +306,18 @@
     //    }
     //});
 
-    $("#idajax-form-cursos").validate({
+    $("#idModalContentForm").validate({
         rules: {
-            nmcursoModNombre: {
+            nmModalNombreCursos: {
                 required: true,
                 minlength: 5
-            },
-            nmcursoModId: {
-                required: true,
-                number: true
             }
         },
         messages: {
-            nmcursoModNombre: {
+            nmModalNombreCursos: {
                 required: "Añade el nombre del curso",
                 minlength: "Al menos debe tener 5 caracteres",
-            },
-            nmcursoModId: {
-                required: "Añade el id del curso",
-                number: "Solo se permiten números",
-            },
+            }
         }
     });
     class CursoDTO {
@@ -288,13 +345,11 @@
     function copiarCurso(curso) {
         $('#idcursoModId').val(curso.cursoId);
         $('#idcursoModNombre').val(curso.nombre);
-        $('#idajax-form-cursos').valid();
     }
     function PostCurso() {
-        //if ($("#idcursoModId").attr("aria-invalid") == 'false' && $("#idcursoModNombre").attr("aria-invalid") == 'false') {
-        if ($("#idajax-form-cursos").validate().form()) {
+        if ($("#idModalContentForm").validate().form()) {
             // Primero creo el objeto Curso con los datos del input text
-            const cursoDTO = { CursoId: 0, Nombre: $('#idcursoModNombre').val() }  // el valor cursoId = 0 es necesario para que el controlador lo trate como null
+            const cursoDTO = { CursoId: 0, Nombre: $('#idModalNombreCursos').val() }  // el valor cursoId = 0 es necesario para que el controlador lo trate como null
             // y pueda realizar el post creando un nuevo cursoId automático tal y como fue
             $.ajax({                                                        // creada la base de datos.
                 type: "POST",
@@ -310,7 +365,7 @@
                     $("#refreshDiv").load(location.href + " #refreshDiv", function () {
                         ModifyTableCursos();
                     });
-                    ClearForm();
+                    OcultarModal();
                 },
                 fail: function (response) {
                     Swal.fire({
@@ -318,7 +373,7 @@
                         title: 'Oops...',
                         text: `¡La solicitud ha fallado!`
                     });
-                    ClearForm();
+                    OcultarModal();
                 },
                 error: function (jqXHR, textStatus, errorThrow) {
                     Swal.fire({
@@ -326,7 +381,7 @@
                         title: 'Oops ha habido un error...',
                         text: `Error message: ${jqXHR.responseText}`
                     });
-                    ClearForm();
+                    OcultarModal();
                 }
             });
         }
@@ -338,9 +393,8 @@
         }
     };
     function UpdateCurso() {
-        //if ($("#idcursoModId").attr("aria-invalid") == 'false' && $("#idcursoModNombre").attr("aria-invalid") == 'false') {
-        if ($("#idajax-form-cursos").validate().form()) {
-            const cursoDTO = { CursoId: parseInt($('#idcursoModId').val()), Nombre: $('#idcursoModNombre').val() }
+        if ($("#idModalContentForm").validate().form()) {
+            const cursoDTO = { CursoId: parseInt($('#idModalIdCursos').val()), Nombre: $('#idModalNombreCursos').val() }
             $.ajax({
                 type: "PUT",
                 url: `https://localhost:7280/api/Cursos/${cursoDTO.CursoId}`,
@@ -355,7 +409,7 @@
                     $("#refreshDiv").load(location.href + " #refreshDiv", function () {
                         ModifyTableCursos();
                     });
-                    ClearForm();
+                    OcultarModal();
                 },
                 fail: function (response) {
                     Swal.fire({
@@ -363,7 +417,7 @@
                         title: 'Oops...',
                         text: `!Ha fallado la solicitud!`
                     });
-                    clearform();
+                    OcultarModal();
                 },
                 error: function (jqXHR, textStatus, errorThrow) {
                     Swal.fire({
@@ -371,7 +425,7 @@
                         title: 'Oops ha habido un error...',
                         text: `Error message: ${jqXHR.responseText}`
                     });
-                    ClearForm();
+                    OcultarModal();
                 }
             });
         }
@@ -382,15 +436,13 @@
             });
         }
     }
-    function DeleteCurso() {
-        //if ($("#idcursoModId").attr("aria-invalid") == 'false' && $("#idcursoModNombre").attr("aria-invalid") == 'false') {
-        if ($("#idajax-form-cursos").validate().form()) {
-            const cursoDTO = { CursoId: parseInt($('#idcursoModId').val()), Nombre: $('#cursoNombreModid').val() }
+    function DeleteCurso(cursoId) {
+        if ($("#idModalContentForm").validate().form()) {
             $.ajax({
                 type: "DELETE",
-                url: `https://localhost:7280/api/Cursos/${cursoDTO.CursoId}`,
+                url: `https://localhost:7280/api/Cursos/${cursoId}`,
                 dataType: "json",
-                data: { id: cursoDTO.CursoId },
+                data: { id: cursoId },
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
                     Swal.fire({
@@ -400,7 +452,7 @@
                     $("#refreshDiv").load(location.href + " #refreshDiv", function () {
                         ModifyTableCursos();
                     });
-                    ClearForm();
+                    OcultarModal();
                 },
                 fail: function (response) {
                     Swal.fire({
@@ -408,7 +460,7 @@
                         title: 'Oops...',
                         text: `¡El curso no existe!`
                     });
-                    ClearForm();
+                    OcultarModal();
                 },
                 error: function (jqXHR, textStatus, errorThrow) {
                     Swal.fire({
@@ -416,7 +468,7 @@
                         title: 'Oops ha habido un error...',
                         text: `Error message: ${jqXHR.responseText}`
                     });
-                    ClearForm();
+                    OcultarModal();
                 }
             });
         }
@@ -427,8 +479,8 @@
             });
         }
     }
-    function ClearForm() {
-        $('#idcursoModId').val('');
-        $('#idcursoModNombre').val('');
-    }
+    //function ClearForm() {
+    //    $('#idcursoModId').val('');
+    //    $('#idcursoModNombre').val('');
+    //}
 </script>
