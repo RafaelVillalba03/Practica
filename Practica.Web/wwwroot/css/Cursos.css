@@ -1,6 +1,6 @@
 ﻿
 .formulario {
-    text-align:center;
+    text-align: center;
     margin: 10px 10px 10px 10px;
     padding: 10px 10px 10px 10px;
     border: 1px dashed gray;
@@ -8,7 +8,7 @@
 }
 
 .btnSubmit {
-    appearance:button;
+    appearance: button;
     background-color: cornflowerblue;
     border: 1px black;
     color: white;
@@ -16,26 +16,27 @@
 }
 
 .tabla {
-    border-collapse:collapse;
+    border-collapse: collapse;
     width: 50%;
     margin: auto;
-    align-items:center;
+    align-items: center;
 }
 
-.tabla td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-}
+    .tabla td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
 
 
-tr:nth-child(even) {
+#idTablaCursos tr:nth-child(even) {
     background-color: #dddddd;
 }
 
 .col-cursoId {
     width: 30px;
 }
+
 .col-nombre {
     width: 150px;
 }
@@ -82,8 +83,93 @@ form label.error {
     border: 2px solid gray;
     cursor: pointer;
 }
+
 .selected td {
     background-color: #AFEFEF !important;
     font-weight: bold;
 }
 
+#idModalCursos {
+    position: fixed; /* Posiciona la modal en el centro de la pantalla */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0px 0px 10px 0px #2d2828;
+    z-index: 2;
+    width: 500px;
+}
+
+#idNavbarModalCursos {
+    padding: 10px;
+}
+#idNavbarModalCursos table {
+   width: 100%;
+}
+
+#idCloseBtnModalCursos {
+    background-color: #eee;
+    color: #2e2e2e;
+    border: none;
+    padding: 10px;
+    float: right;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 50%;
+    padding: 0.5rem 0.9rem;
+}
+
+.modal-content-class {
+    margin-top: 20px;
+}
+.modal-content-class table {
+    width: 100%;
+}
+
+
+#modal-overlay {
+    position: fixed; /* Cubre toda la pantalla */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo desenfocado */
+    z-index: 10; /* Asegura que la modal esté encima del fondo */
+    backdrop-filter: blur(3px);
+    z-index: 1;
+}
+
+#idModalIdCursos {
+    width: 60px !important;
+}
+
+#idModalNombreCursos {
+    width: 300px !important;
+}
+
+.formulario-modal-detalles input {
+    background-color: #e8e8e8;
+    pointer-events: none;
+    border: 1px solid gray;
+    border-radius: 2px;
+}
+
+.formulario-modal-añadir #idModalIdCursos {
+    background-color: #e8e8e8;
+    pointer-events: none;
+    border: 1px solid gray;
+    border-radius: 2px;
+}
+.formulario-modal-añadir #idModalNombreCursos {
+    background-color: white;
+    pointer-events: all;
+    border: 1px solid gray;
+    border-radius: 2px;
+}
+
+.boton-modal-class {
+    float: right;
+    margin: 10px 10px 10px 10px;
+    border: 1px solid #b5b5b5;
+}
