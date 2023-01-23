@@ -95,7 +95,7 @@
         @foreach (var alumno in Model.Alumnos)
         {
             <tr id="@alumno.Id" onclick="getAlumnos(@alumno.Id)">
-                <td class="col-alumnoId">@alumno.Id</td>
+                <td class="col-alumnoId"><a href="#" onclick='MostrarModalDetalles(@Html.Raw(Json.Serialize(alumno)))'>@alumno.Id</a></td>
                 <td class="col-nombre">@alumno.Nombre</td>
                 <td class="col-apellidos">@alumno.Apellido1 @alumno.Apellido2</td>
                 <td>
@@ -115,26 +115,26 @@
     <div class="container-fluid">
         <div class="row tabla my-3">
             <div class="col-3 mx-auto">
-                <button id="idAgregar" class="btn btnAgregar" onclick="EstandarizarAlumno('agregar')">
+                <button id="idAgregar" class="btn btnAgregar" onclick="MostrarModalAñadir()">
                     <img src="~/images/addIcon.svg" alt="Add Icon" />
                     Agregar
                 </button>
             </div>
             <div class="col-3 mx-auto">
-                <button id="idActualizar" class="btn btnActualizar" onclick="EstandarizarAlumno('actualizar')">
+                <button id="idActualizar" class="btn btnActualizar" onclick="ObtenerAlumnoActualizarModal('Actualizar')">
                     <img src="~/images/syncIcon.svg" alt="Update Icon" />
                     Actualizar
                 </button>
             </div>
             <div class="col-3 mx-auto">
-                <button id="idEliminar" class="btn btnEliminar" onclick="DeleteAlumno()">
+                <button id="idEliminar" class="btn btnEliminar" onclick="ObtenerAlumnoActualizarModal('Eliminar')">
                     <img src="~/images/deleteIcon.svg" alt="Delete Icon" />
                     Borrar
                 </button>
             </div>
         </div>
     </div>
-    <div class="my-5">
+    @*<div class="my-5">
         <form id="idajax-form-alumnos">
 
 
@@ -198,8 +198,111 @@
                 </tr>
             </table>
         </form>
-    </div>
+    </div>*@
 </div>
+
+
+<div id="idModalAlumnos" class="visually-hidden">
+    <div id="idNavbarModalAlumnos">
+        <table>
+            <tr>
+                <td>
+                    <h3></h3>
+                </td>
+                <td>
+                    <button id="idCloseBtnModalAlumnos" onclick="OcultarModalAlumnos()">X</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="idModalAlumnosContent" class="modal-content-class">
+        <form id="idModalAlumnosContentForm">
+            <table>
+                <tr>
+                    <td>Id:</td>
+                    <td><input type="text" id="idModalIdAlumnos" name="nmModalIdAlumnos"></td>
+                </tr>
+                <tr>
+                    <td>Nombre:</td>
+                    <td><input type="text" id="idModalNombreAlumnos" name="nmModalNombreAlumnos"></td>
+                </tr>
+                <tr>
+                    <td>Primer apellido:</td>
+                    <td><input type="text" id="idModalApellido1Alumnos" name="nmModalApellido1Alumnos"></td>
+                </tr>
+                <tr>
+                    <td>Segundo apellido:</td>
+                    <td><input type="text" id="idModalApellido2Alumnos" name="nmModalApellido2Alumnos"></td>
+                </tr>
+                <tr>
+                    <td>Curso:</td>
+                    <td>
+
+                        <select id="idModalCursosAlumnos" name="nmModalCursosAlumnos">
+                            <option value=""></option>
+                            @foreach (var curso in Model.Cursos)
+                            {
+                                <option value="@curso.CursoId">@curso.Nombre</option>
+                            }
+                        </select>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>Fecha de Nacimiento:</td>
+                    <td><input type="datetime" id="idModalFechaNacimientoAlumnos" name="nmModalFechaNacimientoAlumnos" data-provide="datepicker"></td>
+                </tr>
+                <tr>
+                    <td>Provincia:</td>
+                    <td><input type="text" id="idModalProvinciaAlumnos" name="nmModalProvinciaAlumnos"></td>
+                </tr>
+                <tr>
+                    <td>Teléfono:</td>
+                    <td><input type="text" id="idModalTelefonoAlumnos" name="nmModalTelefonoAlumnos"></td>
+                </tr>
+                <tr>
+                    <td>Dirección:</td>
+                    <td><input type="text" id="idModalDireccionAlumnos" name="nmModalDireccionAlumnos"></td>
+                </tr>
+                <tr>
+                    <td>Localidad:</td>
+                    <td><input type="text" id="idModalLocalidadAlumnos" name="nmModalDireccionAlumnos"></td>
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td><input type="text" id="idModalEmailAlumnos" name="nmModalEmailAlumnos"></td>
+                </tr>
+                <tr>
+                    <td>Sexo:</td>
+                    <td>
+                        <select id="idModalSexoAlumnos" name="nmModalSexoAlumnos">
+                            <option value="">-</option>
+                            <option value="M">M</option>
+                            <option value="F">F</option>
+                            <option value="O">O</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div id="idModalAlumnosButtonAñadir" onclick="PostAlumno()" class="boton-modal-class btn visually-hidden">Guardar</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div id="idModalAlumnosButtonActualizar" onclick="UpdateAlumno()" class="boton-modal-class btn visually-hidden">Actualizar</div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+</div>
+
+<div id="modal-overlay" onclick="OcultarModalAlumnos()" class="visually-hidden"></div>
+
+
+
 <script>
     (function () {
         $('#fechaNacimiento').datepicker({
@@ -209,6 +312,170 @@
             dateFormat: 'yyyy/mm/dd'
         });
     })
+
+    function MostrarModalDetalles(alumno) {
+        var modal = document.getElementById("idModalAlumnos");
+        var botonGuardar = document.getElementById("idModalAlumnosButtonAñadir");
+        var botonActualizar = document.getElementById("idModalAlumnosButtonActualizar");
+        var modalContent = document.getElementById("idModalAlumnosContent");
+        var overlay = document.getElementById("modal-overlay");
+        var navBarModal = document.getElementById('idNavbarModalAlumnos');
+        var titulo = navBarModal.getElementsByTagName('h3');
+
+        titulo[0].innerHTML = 'Detalles del alumno';
+
+        modal.classList.remove("visually-hidden");
+        overlay.classList.remove("visually-hidden");
+        botonGuardar.classList.add("visually-hidden");
+        botonActualizar.classList.add("visually-hidden");
+
+
+        modalContent.classList.remove('formulario-modal-añadir');
+        modalContent.classList.add('formulario-modal-detalles');
+
+        $('#idModalIdAlumnos').val(alumno.id);
+        $('#idModalNombreAlumnos').val(alumno.nombre);
+        $('#idModalApellido1Alumnos').val(alumno.apellido1);
+        $('#idModalApellido2Alumnos').val(alumno.apellido2);
+        $('#idModalCursosAlumnos').val(alumno.cursoId).change();
+        $('#idModalFechaNacimientoAlumnos').val(alumno.fechaNacimiento);
+        $('#idModalProvinciaAlumnos').val(alumno.provincia);
+        $('#idModalTelefonoAlumnos').val(alumno.telefono);
+        $('#idModalDireccionAlumnos').val(alumno.direccion);
+        $('#idModalLocalidadAlumnos').val(alumno.localidad);
+        $('#idModalEmailAlumnos').val(alumno.email);
+        $('#idModalSexoAlumnos').val(alumno.sexo).change();
+    }
+
+    function OcultarModalAlumnos() {
+        var modal = document.getElementById("idModalAlumnos");
+        var botonGuardar = document.getElementById("idModalAlumnosButtonAñadir");
+        var botonActualizar = document.getElementById("idModalAlumnosButtonActualizar");
+        var overlay = document.getElementById("modal-overlay");
+
+        modal.classList.add("visually-hidden");
+        overlay.classList.add("visually-hidden");
+        botonGuardar.classList.add("visually-hidden");
+        botonActualizar.classList.add("visually-hidden");
+    }
+
+    function MostrarModalAñadir() {
+        var modal = document.getElementById("idModalAlumnos");
+        var botonGuardar = document.getElementById("idModalAlumnosButtonAñadir");
+        var botonActualizar = document.getElementById("idModalAlumnosButtonActualizar");
+        var modalContent = document.getElementById("idModalAlumnosContent");
+        var overlay = document.getElementById("modal-overlay");
+        var navBarModal = document.getElementById('idNavbarModalAlumnos');
+        var titulo = navBarModal.getElementsByTagName('h3');
+
+        titulo[0].innerHTML = 'Añadir Alumno';
+
+        modal.classList.remove("visually-hidden");
+        overlay.classList.remove("visually-hidden");
+        botonGuardar.classList.remove("visually-hidden");
+        botonActualizar.classList.add("visually-hidden");
+
+        modalContent.classList.remove('formulario-modal-detalles');
+        modalContent.classList.add('formulario-modal-añadir');
+
+        $('#idModalIdAlumnos').val('');
+        $('#idModalNombreAlumnos').val('');
+        $('#idModalApellido1Alumnos').val('');
+        $('#idModalApellido2Alumnos').val('');
+        $('#idModalCursosAlumnos').val('').change();
+        $('#idModalFechaNacimientoAlumnos').val('');
+        $('#idModalProvinciaAlumnos').val('');
+        $('#idModalTelefonoAlumnos').val('');
+        $('#idModalDireccionAlumnos').val('');
+        $('#idModalLocalidadAlumnos').val('');
+        $('#idModalEmailAlumnos').val('');
+        $('#idModalSexoAlumnos').val('').change();
+
+    }
+    function MostrarModalActualizar(alumno) {
+        var modal = document.getElementById("idModalAlumnos");
+        var botonGuardar = document.getElementById("idModalAlumnosButtonAñadir");
+        var botonActualizar = document.getElementById("idModalAlumnosButtonActualizar");
+        var modalContent = document.getElementById("idModalAlumnosContent");
+        var overlay = document.getElementById("modal-overlay");
+        var navBarModal = document.getElementById('idNavbarModalAlumnos');
+        var titulo = navBarModal.getElementsByTagName('h3');
+
+        titulo[0].innerHTML = 'Actualizar Alumno';
+
+        modal.classList.remove("visually-hidden");
+        overlay.classList.remove("visually-hidden");
+        botonGuardar.classList.add("visually-hidden");
+        botonActualizar.classList.remove("visually-hidden");
+
+        modalContent.classList.remove('formulario-modal-detalles');
+        modalContent.classList.add('formulario-modal-añadir');
+
+        $('#idModalIdAlumnos').val(alumno.id);
+        $('#idModalNombreAlumnos').val(alumno.nombre);
+        $('#idModalApellido1Alumnos').val(alumno.apellido1);
+        $('#idModalApellido2Alumnos').val(alumno.apellido2);
+        $('#idModalCursosAlumnos').val(alumno.cursoId).change();
+        $('#idModalFechaNacimientoAlumnos').val(alumno.fechaNacimiento);
+        $('#idModalProvinciaAlumnos').val(alumno.provincia);
+        $('#idModalTelefonoAlumnos').val(alumno.telefono);
+        $('#idModalDireccionAlumnos').val(alumno.direccion);
+        $('#idModalLocalidadAlumnos').val(alumno.localidad);
+        $('#idModalEmailAlumnos').val(alumno.email);
+        $('#idModalSexoAlumnos').val(alumno.sexo).change();
+
+    }
+
+    function ObtenerAlumnoActualizarModal(accion) {
+        var table = document.getElementById("idTablaAlumnos");
+        var rows = table.getElementsByTagName("tr");
+        var selectedRowEncontrada = false;
+        for (var i = 0; i < rows.length; i++) {
+            if (rows[i].classList.contains('selected')) {
+                selectedRowEncontrada = true;
+                var alumnoId = rows[i].getElementsByTagName('a')[0].innerText;
+                var nombreAlumno = rows[i].getElementsByClassName('col-nombre')[0].innerText;
+                if (accion == 'Actualizar') {
+                    $.ajax({
+                        type: "GET",
+                        url: `https://localhost:7280/api/Alumnos/${alumnoId}`,
+                        dataType: "json",
+                        success: function (response) {
+                            MostrarModalActualizar(response);
+                        },
+                        fail: function (response) {
+                            console.log(response);
+                        },
+                        error: function (jqXHR, textStatus, errorThrow) {
+                            console.log(jqXHR.responseText)
+                        }
+                    });
+                }
+                else if (accion == 'Eliminar') {
+
+                    Swal.fire({
+                        title: `¿Quieres eliminar el alumno ${nombreAlumno}?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Eliminar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            DeleteAlumno(alumnoId);
+                        }
+                    })
+                }
+                break;
+            }
+        }
+        if (!selectedRowEncontrada) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Selecciona un alumno',
+            });
+        }
+    }
 
     function ModifyTableAlumnos() {
         $('#idTablaAlumnos').createTablePagination({
@@ -232,8 +499,6 @@
         }
     }
     $(ModifyTableAlumnos());
-
-
     $("#idsubmit-form-alumnos").validate({
         rules: {
             id: {
@@ -254,78 +519,72 @@
 
         }
     });
-    $("#idajax-form-alumnos").validate({
+    $("#idModalAlumnosContentForm").validate({
         rules: {
-            nmalumnosModId: {
+            nmModalNombreAlumnos: {
+                required: true,
+                minlength: 3
+            },
+            nmModalApellido1Alumnos: {
+                required: true,
+                minlength: 3
+            },
+            nmModalApellido2Alumnos: {
+                required: true,
+                minlength: 3
+            },
+            nmModalCursosAlumnos: {
                 required: true,
                 number: true
             },
-            nmalumnosModNombre: {
-                required: true,
-                minlength: 3
-            },
-            nmalumnosModApellido1: {
-                required: true,
-                minlength: 3
-            },
-            nmalumnosModApellido2: {
-                required: true,
-                minlength: 3
-            },
-            nmalumnoModNombreCurso:
-            {
-                required: true,
-                number: true
-            },
-            nmalumnosModFechaNacimiento: {
+            nmModalFechaNacimientoAlumnos: {
                 required: true
             },
-            nmalumnosModProvincia: {
+            nmModalProvinciaAlumnos: {
                 required: true
             },
-            nmalumnosModTelefono: {
+            nmModalTelefonoAlumnos: {
                 required: true,
                 number: true,
                 minlength: 9
             },
-            nmalumnosModDireccion: {
+            nmModalDireccionAlumnos: {
                 required: true
             },
-            nmalumnosModLocalidad: {
+            nmModalLocalidadAlumnos: {
                 required: true
             },
-            nmalumnosModEmail: {
+            nmModalEmailAlumnos: {
                 required: true,
                 email: true
             },
-            nmalumnosModSexo: {
+            nmModalSexoAlumnos: {
                 required: true,
                 minlength: 1
             }
 
         },
         messages: {
-            nmalumnosModId: "Añade el id del alumno",
-            nmalumnosModNombre: {
+            nmModalNombreAlumnos: {
                 required: "Añade el nombre del alumno",
                 minlength: "El nombre debe tener al menos 3 caracteres"
             },
-            nmalumnosModApellido1: {
+            nmModalApellido1Alumnos: {
                 required: "Añade el primer apellido",
                 minlength: "El apellido debe tener al menos 3 caracteres"
             },
-            nmalumnosModApellido2: {
+            nmModalApellido2Alumnos: {
                 required: "Añade el primer apellido",
                 minlength: "El apellido debe tener al menos 3 caracteres"
             },
-            nmalumnoModNombreCurso: "Añade un curso",
-            nmalumnosModFechaNacimiento: "Añade una fecha de nacimiento",
-            nmalumnosModProvincia: "Añade una provincia",
-            nmalumnosModTelefono: "Añade un teléfono válido",
-            nmalumnosModDireccion: "Añade una dirección",
-            nmalumnosModLocalidad: "Añade una localidad",
-            nmalumnosModEmail: "Añade un email",
-            nmalumnosModSexo: "Añade el sexo del alumno"
+            nmModalCursosAlumnos: "Añade un curso",
+            nmModalFechaNacimientoAlumnos: "Añade una fecha de nacimiento",
+            nmModalProvinciaAlumnos: "Añade una provincia",
+            nmModalTelefonoAlumnos: "Añade un teléfono válido",
+            nmModalDireccionAlumnos: "Añade una dirección",
+            nmModalLocalidadAlumnos: "Añade una localidad",
+            nmModalEmailAlumnos: "Añade un email",
+            nmModalSexoAlumnos: "Añade el sexo del alumno"
         }
     });
     class AlumnoDTO {
@@ -374,7 +633,6 @@
         $('#idalumnosModEmail').val(alumno.email);
         $('#idalumnosModLocalidad').val(alumno.localidad);
         $('#idalumnosModSexo').val(alumno.sexo).change();
-        $('#idajax-form-alumnos').valid();
 
     }
     function EstandarizarAlumno(accion) {
@@ -403,96 +661,29 @@
             });
         }
     }
-    function PostAlumno(alumnoDTO) {
-        $.ajax({
-            type: "POST",
-            url: "https://localhost:7280/api/Alumnos",
-            dataType: "json",
-            data: JSON.stringify(alumnoDTO),
-            contentType: "application/json; charset=utf-8",
-            success: function (response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: `El alumno ${alumnoDTO.Nombre} ha sido creado`,
-                });
-                $("#refreshDiv").load(location.href + " #refreshDiv", function () {
-                    ModifyTableAlumnos();
-                });
-                ClearForm();
-            },
-            fail: function (response) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: `¡La solicitud ha fallado!`,
-                });
-                ClearForm();
-            },
-            error: function (jqXHR, textStatus, errorThrow) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops ha habido un error...',
-                    text: `Error message: ${jqXHR.responseText}`
-                });
-                ClearForm();
-            }
-        });
-
-    }
-    function UpdateAlumno(alumnoDTO) {
-        $.ajax({
-            type: "PUT",
-            url: `https://localhost:7280/api/Alumnos/${alumnoDTO.Id}`,
-            dataType: "json",
-            data: JSON.stringify(alumnoDTO),
-            contentType: "application/json; charset=utf-8",
-            success: function (response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: `El alumno ${alumnoDTO.Nombre} ha sido actualizado`,
-                });
-                ClearForm();
-                $("#refreshDiv").load(location.href + " #refreshDiv", function () {
-                    ModifyTableAlumnos();
-                });
-                ClearForm();
-            },
-            fail: function (response) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: `¡Ha fallado la solicitud!`,
-                });
-                ClearForm();
-            },
-            error: function (jqXHR, textStatus, errorThrow) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops ha habido un error...',
-                    text: `Error message: ${jqXHR.responseText}`
-                });
-                ClearForm();
-            }
-        });
-    }
-    function DeleteAlumno() {
-        if ($("#idajax-form-alumnos").validate().form()) {
-            alumnoId = $('#idalumnosModId').val();
-            alumnoNombre = $('#idalumnosModNombre').val();
+    function PostAlumno() {
+        if ($("#idModalAlumnosContentForm").validate().form()) {
+            const alumnoDTO = {
+                Id: 0, Nombre: $('#idModalNombreAlumnos').val(), Apellido1: $('#idModalApellido1Alumnos').val(), Apellido2: $('#idModalApellido2Alumnos').val(),
+                FechaNacimiento: $('#idModalFechaNacimientoAlumnos').val(), Sexo: $('#idModalSexoAlumnos').val(), Direccion: $('#idModalDireccionAlumnos').val(),
+                Provincia: $('#idModalProvinciaAlumnos').val(), Localidad: $('#idModalLocalidadAlumnos').val(), Telefono: $('#idModalTelefonoAlumnos').val(),
+                CursoId: $('#idModalCursosAlumnos').val(), Email: $('#idModalEmailAlumnos').val()
+            };
             $.ajax({
-                type: "DELETE",
-                url: `https://localhost:7280/api/Alumnos/${alumnoId}`,
+                type: "POST",
+                url: "https://localhost:7280/api/Alumnos",
                 dataType: "json",
+                data: JSON.stringify(alumnoDTO),
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
                     Swal.fire({
                         icon: 'success',
-                        title: `El alumno con Id ${alumnoId} ha sido eliminado`,
+                        title: `El alumno ${alumnoDTO.Nombre} ha sido creado`,
                     });
                     $("#refreshDiv").load(location.href + " #refreshDiv", function () {
                         ModifyTableAlumnos();
                     });
-                    ClearForm();
+                    OcultarModalAlumnos();
                 },
                 fail: function (response) {
                     Swal.fire({
@@ -500,7 +691,7 @@
                         title: 'Oops...',
                         text: `¡La solicitud ha fallado!`,
                     });
-                    ClearForm();
+                    OcultarModalAlumnos();
                 },
                 error: function (jqXHR, textStatus, errorThrow) {
                     Swal.fire({
@@ -508,7 +699,7 @@
                         title: 'Oops ha habido un error...',
                         text: `Error message: ${jqXHR.responseText}`
                     });
-                    ClearForm();
+                    OcultarModalAlumnos();
                 }
             });
         }
@@ -519,18 +710,101 @@
             });
         }
     }
-    function ClearForm() {
-        $('#idalumnosModId').val('');
-        $('#idalumnosModNombre').val('');
-        $('#idalumnosModApellido1').val('');
-        $('#idalumnosModApellido2').val('');
-        $('#idalumnoModNombreCurso').val('').change();
-        $('#idalumnosModFechaNacimiento').val('');
-        $('#idalumnosModProvincia').val('');
-        $('#idalumnosModTelefono').val('');
-        $('#idalumnosModDireccion').val('');
-        $('#idalumnosModEmail').val('');
-        $('#idalumnosModLocalidad').val('');
-        $('#idalumnosModSexo').val('').change();
+    function UpdateAlumno() {
+        if ($("#idModalAlumnosContentForm").validate().form()) {
+            const alumnoDTO = {
+                Id: $('#idModalIdAlumnos').val(), Nombre: $('#idModalNombreAlumnos').val(), Apellido1: $('#idModalApellido1Alumnos').val(), Apellido2: $('#idModalApellido2Alumnos').val(),
+                FechaNacimiento: $('#idModalFechaNacimientoAlumnos').val(), Sexo: $('#idModalSexoAlumnos').val(), Direccion: $('#idModalDireccionAlumnos').val(),
+                Provincia: $('#idModalProvinciaAlumnos').val(), Localidad: $('#idModalLocalidadAlumnos').val(), Telefono: $('#idModalTelefonoAlumnos').val(),
+                CursoId: $('#idModalCursosAlumnos').val(), Email: $('#idModalEmailAlumnos').val()
+            };
+            $.ajax({
+                type: "PUT",
+                url: `https://localhost:7280/api/Alumnos/${alumnoDTO.Id}`,
+                dataType: "json",
+                data: JSON.stringify(alumnoDTO),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: `El alumno ${alumnoDTO.Nombre} ha sido actualizado`,
+                    });
+                    $("#refreshDiv").load(location.href + " #refreshDiv", function () {
+                        ModifyTableAlumnos();
+                    });
+                    OcultarModalAlumnos();
+                },
+                fail: function (response) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: `¡Ha fallado la solicitud!`,
+                    });
+                    OcultarModalAlumnos();
+                },
+                error: function (jqXHR, textStatus, errorThrow) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops ha habido un error...',
+                        text: `Error message: ${jqXHR.responseText}`
+                    });
+                    OcultarModalAlumnos();
+                }
+            });
+        }
+        else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Introduce correctamente los campos del alumno',
+            });
+        }
     }
+    function DeleteAlumno(alumnoId) {
+        $.ajax({
+            type: "DELETE",
+            url: `https://localhost:7280/api/Alumnos/${alumnoId}`,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: `El alumno ha sido eliminado`,
+                });
+                $("#refreshDiv").load(location.href + " #refreshDiv", function () {
+                    ModifyTableAlumnos();
+                });
+                OcultarModalAlumnos();
+            },
+            fail: function (response) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: `¡La solicitud ha fallado!`,
+                });
+                OcultarModalAlumnos();
+            },
+            error: function (jqXHR, textStatus, errorThrow) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops ha habido un error...',
+                    text: `Error message: ${jqXHR.responseText}`
+                });
+                OcultarModalAlumnos();
+            }
+        });
+    }
+                        //function ClearForm() {
+                        //    $('#idalumnosModId').val('');
+                        //    $('#idalumnosModNombre').val('');
+                        //    $('#idalumnosModApellido1').val('');
+                        //    $('#idalumnosModApellido2').val('');
+                        //    $('#idalumnoModNombreCurso').val('').change();
+                        //    $('#idalumnosModFechaNacimiento').val('');
+                        //    $('#idalumnosModProvincia').val('');
+                        //    $('#idalumnosModTelefono').val('');
+                        //    $('#idalumnosModDireccion').val('');
+                        //    $('#idalumnosModEmail').val('');
+                        //    $('#idalumnosModLocalidad').val('');
+                        //    $('#idalumnosModSexo').val('').change();
+                        //}
 </script>

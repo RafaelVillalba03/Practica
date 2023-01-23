@@ -35,7 +35,7 @@ namespace Practica.Web.Controllers
             string nombre = cursoReferencia.Nombre;
 
             List<Curso> cursosFiltrados = listaCursos.Where(c => (c.CursoId == cursoId || cursoId == 0)
-            && (nombre == null || c.Nombre.Contains(nombre))).ToList();
+            && (string.IsNullOrEmpty(nombre) || c.Nombre.Contains(nombre))).ToList();
             viewModel.SetCursos(cursosFiltrados);
 
             return View(viewModel);

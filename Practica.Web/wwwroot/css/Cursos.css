@@ -89,7 +89,7 @@ form label.error {
     font-weight: bold;
 }
 
-#idModal {
+#idModalCursos {
     position: fixed; /* Posiciona la modal en el centro de la pantalla */
     top: 50%;
     left: 50%;
@@ -101,14 +101,14 @@ form label.error {
     width: 500px;
 }
 
-#idNavbarModal {
+#idNavbarModalCursos {
     padding: 10px;
 }
-#idNavbarModal table {
+#idNavbarModalCursos table {
    width: 100%;
 }
 
-#idCloseBtnModal {
+#idCloseBtnModalCursos {
     background-color: #eee;
     color: #2e2e2e;
     border: none;
