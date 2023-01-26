@@ -18,11 +18,24 @@
             <div class="my-5">
                 <table class="mx-auto">
                     <tr>
-                        <td>Curso Id:</td>
-                        <td><input type="text" id="idcursoId" name="cursoid" maxlength="8"></td>    @*El campo name tiene que llamarse igual que el campo CursoId de la clase Curso en el controlador, si no no reconoce el param*@
+                        @*<td>Curso Id:</td>
+                        <td><input type="text" id="idcursoId" name="cursoid" maxlength="8"></td>
                         <td class="espaciado"></td>
                         <td>Nombre:</td>
-                        <td><input type="text" id="idcursoNombre" name="nombre" maxlength="50"></td>
+                        <td><input type="text" id="idcursoNombre" name="nombre" maxlength="50"></td>*@
+                        <td>
+                            @(Html.Kendo().TextBox()
+                                .Name("cursoId")
+                                .Label(l => l.Content("Curso Id").Floating(true))
+                                .HtmlAttributes(new { style = "width: 80px" })
+                                )
+                        </td>
+                        <td>
+                            @(Html.Kendo().TextBox()
+                                .Name("nombre")
+                                .Label(l => l.Content("Nombre").Floating(true))
+                                )
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -47,6 +60,28 @@
             </tr>
         }
     </table>
+</div>
+<div id="gridDiv" class="mx-auto">
+    @(
+        Html.Kendo().Grid<Curso>(Model.Cursos)
+        .Name("gridCurso")
+        .Columns(columns =>
+        {
+            columns.Bound(o => o.CursoId).Width(100).Title("Curso Id");
+            columns.Bound(o => o.Nombre).Width(200).Title("Nombre");
+        })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(5)
+            .Model(model =>
+            {
+                model.Field(p => p.CursoId);
+                model.Field(p => p.Nombre);
+            })
+        )
+        .Selectable()
+        .Pageable()
+        )
 </div>
 <div class="formulario">
     <div class="container-fluid">
@@ -100,31 +135,45 @@
             </tr>
         </table>
     </div>
+    @* <div id="idModalCursosContent" class="modal-content-class">
+    <form id="idModalCursosContentForm">
+    <table>
+    <tr>
+    <td>Curso Id:</td>
+    <td><input type="text" id="idModalIdCursos" name="nmModalIdCursos"></td>
+    </tr>
+    <tr>
+    <td>Nombre:</td>
+    <td><input type="text" id="idModalNombreCursos" name="nmModalNombreCursos"></td>
+    </tr>
+    <tr>
+    <td colspan="2">
+    <div id="idModalCursosButtonAñadir" onclick="PostCurso()" class="boton-modal-class btn visually-hidden">Guardar</div>
+    </td>
+    </tr>
+    <tr>
+    <td colspan="2">
+    <div id="idModalCursosButtonActualizar" onclick="UpdateCurso()" class="boton-modal-class btn visually-hidden">Actualizar</div>
+    </td>
+    </tr>
+    </table>
+    </form>
+    </div>*@
     <div id="idModalCursosContent" class="modal-content-class">
-        <form id="idModalCursosContentForm">
-            <table>
-                <tr>
-                    <td>Curso Id:</td>
-                    <td><input type="text" id="idModalIdCursos" name="nmModalIdCursos"></td>
-                </tr>
-                <tr>
-                    <td>Nombre:</td>
-                    <td><input type="text" id="idModalNombreCursos" name="nmModalNombreCursos"></td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <div id="idModalCursosButtonAñadir" onclick="PostCurso()" class="boton-modal-class btn visually-hidden">Guardar</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <div id="idModalCursosButtonActualizar" onclick="UpdateCurso()" class="boton-modal-class btn visually-hidden">Actualizar</div>
-                    </td>
-                </tr>
-            </table>
-        </form>
+        <partial name="../Shared/_ModalFormCursos.cshtml" />
+        <table>
+            <tr>
+                <td colspan="2">
+                    <div id="idModalCursosButtonAñadir" onclick="PostCurso()" class="boton-modal-class btn visually-hidden">Guardar</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div id="idModalCursosButtonActualizar" onclick="UpdateCurso()" class="boton-modal-class btn visually-hidden">Actualizar</div>
+                </td>
+            </tr>
+        </table>
     </div>
-
 </div>
 
 <div id="modal-overlay" onclick="OcultarModalCursos()" class="visually-hidden"></div>
@@ -482,8 +531,8 @@
             }
         });
     }
-            //function ClearForm() {
-            //    $('#idcursoModId').val('');
-            //    $('#idcursoModNombre').val('');
-            //}
+                                                            //function ClearForm() {
+                                                            //    $('#idcursoModId').val('');
+                                                            //    $('#idcursoModNombre').val('');
+                                                            //}
 </script>

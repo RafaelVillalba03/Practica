@@ -111,6 +111,45 @@
         }
     </table>
 </div>
+
+<div id="gridDiv" class="mx-auto">
+    @(
+        Html.Kendo().Grid<Alumno>(Model.Alumnos)
+        .Name("gridAlumno")
+        .Columns(columns =>
+        {
+            columns.Bound(o => o.Id).Width(100).Title("Id");
+            columns.Bound(o => o.Nombre).Width(200).Title("Nombre");
+            columns.Bound(o => o.Apellido1).Width(200).Title("Primer Apellido");
+            columns.Bound(o => o.Apellido2).Width(200).Title("Segundo Apellido");
+            columns.Bound(o => o.CursoId).Width(300).Title("Curso").ClientTemplate("#=getCursoName(CursoId)#");
+
+        })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(10)
+            .ServerOperation(false)
+            .Model(model =>
+            {
+                model.Field(p => p.Id);
+                model.Field(p => p.Nombre);
+                model.Field(p => p.Apellido1);
+                model.Field(p => p.Apellido2);
+                model.Field(p => p.Localidad);
+                model.Field(p => p.Direccion);
+                model.Field(p => p.Telefono);
+                model.Field(p => p.Email);
+                model.Field(p => p.CursoId);
+                model.Field(p => p.FechaNacimiento);
+                model.Field(p => p.Provincia);
+                model.Field(p => p.Sexo);
+            })
+        )
+        .Selectable()
+        .Pageable()
+        )
+</div>
+
 <div class="formulario">
     <div class="container-fluid">
         <div class="row tabla my-3">
@@ -135,69 +174,69 @@
         </div>
     </div>
     @*<div class="my-5">
-        <form id="idajax-form-alumnos">
+    <form id="idajax-form-alumnos">
 
 
-            <table class="mx-auto">
-                <tr>
-                    <td>Id:</td>
-                    <td><input type="text" id="idalumnosModId" name="nmalumnosModId" maxlength="8"></td>
-                    <td></td>
-                    <td>Provinicia:</td>
-                    <td><input type="text" id="idalumnosModProvincia" name="nmalumnosModProvincia"></td>
-                </tr>
-                <tr>
-                    <td>Nombre:</td>
-                    <td><input type="text" id="idalumnosModNombre" name="nmalumnosModNombre" maxlength="50"></td>
-                    <td class="espaciado"></td>
-                    <td>Teléfono:</td>
-                    <td><input type="text" id="idalumnosModTelefono" name="nmalumnosModTelefono" maxlength="9"></td>
-                </tr>
-                <tr>
-                    <td>Primer apellido:</td>
-                    <td><input type="text" id="idalumnosModApellido1" name="nmalumnosModApellido1" maxlength="50"></td>
-                    <td></td>
-                    <td>Dirección:</td>
-                    <td><input type="text" id="idalumnosModDireccion" name="nmalumnosModDireccion" maxlength="50"></td>
-                </tr>
-                <tr>
-                    <td>Segundo apellido:</td>
-                    <td><input type="text" id="idalumnosModApellido2" name="nmalumnosModApellido2" maxlength="50"></td>
-                    <td></td>
-                    <td>Localidad:</td>
-                    <td><input type="text" id="idalumnosModLocalidad" name="nmalumnosModLocalidad" maxlength="50"></td>
-                </tr>
-                <tr>
-                    <td>Curso:</td>
-                    <td>
-                        <select id="idalumnoModNombreCurso" name="nmalumnoModNombreCurso">
-                            <option value=""></option>
-                            @foreach (var curso in Model.Cursos)
-                            {
-                                <option value="@curso.CursoId">@curso.Nombre</option>
-                            }
-                        </select>
-                    </td>
-                    <td></td>
-                    <td>Email:</td>
-                    <td><input type="email" id="idalumnosModEmail" name="nmalumnosModEmail" maxlength="50"></td>
-                </tr>
-                <tr>
-                    <td>Fecha de nacimiento:</td>
-                    <td><input type="datetime" id="idalumnosModFechaNacimiento" name="nmalumnosModFechaNacimiento" data-provide="datepicker"></td>
-                    <td></td>
-                    <td>Sexo:</td>
-                    <td>
-                        <select id="idalumnosModSexo" name="nmalumnosModSexo">
-                            <option value="">-</option>
-                            <option value="M">M</option>
-                            <option value="F">F</option>
-                            <option value="O">O</option>
-                        </select>
-                    </td>
-                </tr>
-            </table>
-        </form>
+    <table class="mx-auto">
+    <tr>
+    <td>Id:</td>
+    <td><input type="text" id="idalumnosModId" name="nmalumnosModId" maxlength="8"></td>
+    <td></td>
+    <td>Provinicia:</td>
+    <td><input type="text" id="idalumnosModProvincia" name="nmalumnosModProvincia"></td>
+    </tr>
+    <tr>
+    <td>Nombre:</td>
+    <td><input type="text" id="idalumnosModNombre" name="nmalumnosModNombre" maxlength="50"></td>
+    <td class="espaciado"></td>
+    <td>Teléfono:</td>
+    <td><input type="text" id="idalumnosModTelefono" name="nmalumnosModTelefono" maxlength="9"></td>
+    </tr>
+    <tr>
+    <td>Primer apellido:</td>
+    <td><input type="text" id="idalumnosModApellido1" name="nmalumnosModApellido1" maxlength="50"></td>
+    <td></td>
+    <td>Dirección:</td>
+    <td><input type="text" id="idalumnosModDireccion" name="nmalumnosModDireccion" maxlength="50"></td>
+    </tr>
+    <tr>
+    <td>Segundo apellido:</td>
+    <td><input type="text" id="idalumnosModApellido2" name="nmalumnosModApellido2" maxlength="50"></td>
+    <td></td>
+    <td>Localidad:</td>
+    <td><input type="text" id="idalumnosModLocalidad" name="nmalumnosModLocalidad" maxlength="50"></td>
+    </tr>
+    <tr>
+    <td>Curso:</td>
+    <td>
+    <select id="idalumnoModNombreCurso" name="nmalumnoModNombreCurso">
+    <option value=""></option>
+    @foreach (var curso in Model.Cursos)
+    {
+    <option value="@curso.CursoId">@curso.Nombre</option>
+    }
+    </select>
+    </td>
+    <td></td>
+    <td>Email:</td>
+    <td><input type="email" id="idalumnosModEmail" name="nmalumnosModEmail" maxlength="50"></td>
+    </tr>
+    <tr>
+    <td>Fecha de nacimiento:</td>
+    <td><input type="datetime" id="idalumnosModFechaNacimiento" name="nmalumnosModFechaNacimiento" data-provide="datepicker"></td>
+    <td></td>
+    <td>Sexo:</td>
+    <td>
+    <select id="idalumnosModSexo" name="nmalumnosModSexo">
+    <option value="">-</option>
+    <option value="M">M</option>
+    <option value="F">F</option>
+    <option value="O">O</option>
+    </select>
+    </td>
+    </tr>
+    </table>
+    </form>
     </div>*@
 </div>
 
@@ -216,85 +255,19 @@
         </table>
     </div>
     <div id="idModalAlumnosContent" class="modal-content-class">
-        <form id="idModalAlumnosContentForm">
-            <table>
-                <tr>
-                    <td>Id:</td>
-                    <td><input type="text" id="idModalIdAlumnos" name="nmModalIdAlumnos"></td>
-                </tr>
-                <tr>
-                    <td>Nombre:</td>
-                    <td><input type="text" id="idModalNombreAlumnos" name="nmModalNombreAlumnos"></td>
-                </tr>
-                <tr>
-                    <td>Primer apellido:</td>
-                    <td><input type="text" id="idModalApellido1Alumnos" name="nmModalApellido1Alumnos"></td>
-                </tr>
-                <tr>
-                    <td>Segundo apellido:</td>
-                    <td><input type="text" id="idModalApellido2Alumnos" name="nmModalApellido2Alumnos"></td>
-                </tr>
-                <tr>
-                    <td>Curso:</td>
-                    <td>
-
-                        <select id="idModalCursosAlumnos" name="nmModalCursosAlumnos">
-                            <option value=""></option>
-                            @foreach (var curso in Model.Cursos)
-                            {
-                                <option value="@curso.CursoId">@curso.Nombre</option>
-                            }
-                        </select>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td>Fecha de Nacimiento:</td>
-                    <td><input type="datetime" id="idModalFechaNacimientoAlumnos" name="nmModalFechaNacimientoAlumnos" data-provide="datepicker"></td>
-                </tr>
-                <tr>
-                    <td>Provincia:</td>
-                    <td><input type="text" id="idModalProvinciaAlumnos" name="nmModalProvinciaAlumnos"></td>
-                </tr>
-                <tr>
-                    <td>Teléfono:</td>
-                    <td><input type="text" id="idModalTelefonoAlumnos" name="nmModalTelefonoAlumnos"></td>
-                </tr>
-                <tr>
-                    <td>Dirección:</td>
-                    <td><input type="text" id="idModalDireccionAlumnos" name="nmModalDireccionAlumnos"></td>
-                </tr>
-                <tr>
-                    <td>Localidad:</td>
-                    <td><input type="text" id="idModalLocalidadAlumnos" name="nmModalDireccionAlumnos"></td>
-                </tr>
-                <tr>
-                    <td>Email:</td>
-                    <td><input type="text" id="idModalEmailAlumnos" name="nmModalEmailAlumnos"></td>
-                </tr>
-                <tr>
-                    <td>Sexo:</td>
-                    <td>
-                        <select id="idModalSexoAlumnos" name="nmModalSexoAlumnos">
-                            <option value="">-</option>
-                            <option value="M">M</option>
-                            <option value="F">F</option>
-                            <option value="O">O</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <div id="idModalAlumnosButtonAñadir" onclick="PostAlumno()" class="boton-modal-class btn visually-hidden">Guardar</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <div id="idModalAlumnosButtonActualizar" onclick="UpdateAlumno()" class="boton-modal-class btn visually-hidden">Actualizar</div>
-                    </td>
-                </tr>
-            </table>
-        </form>
+        <partial name="../Shared/_ModalFormAlumnos.cshtml" />
+        <table>
+            <tr>
+                <td colspan="2">
+                    <div id="idModalAlumnosButtonAñadir" onclick="PostAlumno()" class="boton-modal-class btn visually-hidden">Guardar</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div id="idModalAlumnosButtonActualizar" onclick="UpdateAlumno()" class="boton-modal-class btn visually-hidden">Actualizar</div>
+                </td>
+            </tr>
+        </table>
     </div>
 
 </div>
@@ -304,14 +277,28 @@
 
 
 <script>
-    (function () {
-        $('#fechaNacimiento').datepicker({
-            dateFormat: 'dd/mm/yyyy'
+
+    //$(function () {
+    //    $('#fechaNacimiento').datepicker({
+    //        dateFormat: 'dd/mm/yyyy'
+    //    });
+    //    //$('#idalumnosModFechaNacimiento').datepicker({
+    //    //    dateFormat: 'yyyy/mm/dd'
+    //    //});
+    //})
+    function getCursoName(cursoId) {
+        var cursos = @Html.Raw(Json.Serialize(Model.Cursos));
+        var curso = cursos.find(function (c) { return c.cursoId == cursoId; });
+        return curso.nombre ? curso.nombre : "";
+    }
+
+    $(document).ready(function () {
+        // create DateTimePicker from input HTML element
+        $("#fechaNacimiento").kendoDateTimePicker({
+            value: new Date(),
+            dateInput: true
         });
-        $('#idalumnosModFechaNacimiento').datepicker({
-            dateFormat: 'yyyy/mm/dd'
-        });
-    })
+    });
 
     function MostrarModalDetalles(alumno) {
         var modal = document.getElementById("idModalAlumnos");
@@ -604,6 +591,8 @@
             this.Email = Email;
         }
     }
+
+
     function getAlumnos(alumnoId) {
         $.ajax({
             type: "GET",
@@ -793,18 +782,18 @@
             }
         });
     }
-                        //function ClearForm() {
-                        //    $('#idalumnosModId').val('');
-                        //    $('#idalumnosModNombre').val('');
-                        //    $('#idalumnosModApellido1').val('');
-                        //    $('#idalumnosModApellido2').val('');
-                        //    $('#idalumnoModNombreCurso').val('').change();
-                        //    $('#idalumnosModFechaNacimiento').val('');
-                        //    $('#idalumnosModProvincia').val('');
-                        //    $('#idalumnosModTelefono').val('');
-                        //    $('#idalumnosModDireccion').val('');
-                        //    $('#idalumnosModEmail').val('');
-                        //    $('#idalumnosModLocalidad').val('');
-                        //    $('#idalumnosModSexo').val('').change();
-                        //}
+                                                    //function ClearForm() {
+                                                    //    $('#idalumnosModId').val('');
+                                                    //    $('#idalumnosModNombre').val('');
+                                                    //    $('#idalumnosModApellido1').val('');
+                                                    //    $('#idalumnosModApellido2').val('');
+                                                    //    $('#idalumnoModNombreCurso').val('').change();
+                                                    //    $('#idalumnosModFechaNacimiento').val('');
+                                                    //    $('#idalumnosModProvincia').val('');
+                                                    //    $('#idalumnosModTelefono').val('');
+                                                    //    $('#idalumnosModDireccion').val('');
+                                                    //    $('#idalumnosModEmail').val('');
+                                                    //    $('#idalumnosModLocalidad').val('');
+                                                    //    $('#idalumnosModSexo').val('').change();
+                                                    //}
 </script>

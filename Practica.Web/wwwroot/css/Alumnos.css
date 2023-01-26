@@ -188,3 +188,7 @@ form label.error {
     margin: 10px 10px 10px 10px;
     border: 1px solid #b5b5b5;
 }
+
+#gridDiv {
+    margin: 50px;
+}
