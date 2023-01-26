@@ -1,0 +1,68 @@
+﻿<form id="idModalAlumnosContentForm">
+    <table>
+        <tr>
+            <td>Id:</td>
+            <td><input type="text" id="idModalIdAlumnos" name="nmModalIdAlumnos"></td>
+        </tr>
+        <tr>
+            <td>Nombre:</td>
+            <td><input type="text" id="idModalNombreAlumnos" name="nmModalNombreAlumnos"></td>
+        </tr>
+        <tr>
+            <td>Primer apellido:</td>
+            <td><input type="text" id="idModalApellido1Alumnos" name="nmModalApellido1Alumnos"></td>
+        </tr>
+        <tr>
+            <td>Segundo apellido:</td>
+            <td><input type="text" id="idModalApellido2Alumnos" name="nmModalApellido2Alumnos"></td>
+        </tr>
+        <tr>
+            <td>Curso:</td>
+            <td>
+
+                <select id="idModalCursosAlumnos" name="nmModalCursosAlumnos">
+                    <option value=""></option>
+                    @foreach (var curso in Model.Cursos)
+                    {
+                        <option value="@curso.CursoId">@curso.Nombre</option>
+                    }
+                </select>
+
+            </td>
+        </tr>
+        <tr>
+            <td>Fecha de Nacimiento:</td>
+            <td><input type="datetime" id="idModalFechaNacimientoAlumnos" name="nmModalFechaNacimientoAlumnos" data-provide="datepicker"></td>
+        </tr>
+        <tr>
+            <td>Provincia:</td>
+            <td><input type="text" id="idModalProvinciaAlumnos" name="nmModalProvinciaAlumnos"></td>
+        </tr>
+        <tr>
+            <td>Teléfono:</td>
+            <td><input type="text" id="idModalTelefonoAlumnos" name="nmModalTelefonoAlumnos"></td>
+        </tr>
+        <tr>
+            <td>Dirección:</td>
+            <td><input type="text" id="idModalDireccionAlumnos" name="nmModalDireccionAlumnos"></td>
+        </tr>
+        <tr>
+            <td>Localidad:</td>
+            <td><input type="text" id="idModalLocalidadAlumnos" name="nmModalDireccionAlumnos"></td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td><input type="text" id="idModalEmailAlumnos" name="nmModalEmailAlumnos"></td>
+        </tr>
+        <tr>
+            <td>Sexo:</td>
+            <td>
+                <select id="idModalSexoAlumnos" name="nmModalSexoAlumnos">
+                    <option value="">-</option>
+                    <option value="M">M</option>
+                    <option value="F">F</option>
+                    <option value="O">O</option>
+                </select>
+            </td>
+        </tr>
+</form>

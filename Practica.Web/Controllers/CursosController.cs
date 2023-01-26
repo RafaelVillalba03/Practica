@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Kendo.Mvc.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Practica.API.Models;
 using Practica.Web.ViewModel;
@@ -40,5 +41,26 @@ namespace Practica.Web.Controllers
 
             return View(viewModel);
         }
+        //public async Task<IActionResult> Orders_Read([DataSourceRequest] DataSourceRequest request)
+        //{
+
+        //    var serializerOptions = new JsonSerializerOptions()
+        //    {
+        //        // Esto elimina el camelCase
+        //    };
+
+        //    var response = await _httpClient.GetAsync("https://localhost:7280/api/Cursos");
+        //    var json = await response.Content.ReadAsStringAsync();
+        //    var listaCursos = JsonConvert.DeserializeObject<List<Curso>>(json);
+
+        //    // Convertir la colección a un formato que pueda ser entendido por el grid de Kendo
+        //    var result = listaCursos.ToDataSourceResult(request);
+
+        //    // Devolver los datos en formato JSON
+        //    return Json(result, serializerOptions);
+        //}
+
     }
+
 }
+

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Kendo.Mvc.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Practica.API.Models;
 using Practica.Web.Models;
@@ -84,6 +85,19 @@ namespace Practica.Web.Controllers
 
             return View(viewModel);
         }
+        //public async Task<IActionResult> Orders_Read([DataSourceRequest] DataSourceRequest request)
+        //{
+
+        //    var serializerOptions = new System.Text.Json.JsonSerializerOptions()
+        //    {
+        //        // Esto elimina el camelCase
+        //    };
+
+
+
+        //    // Devolver los datos en formato JSON
+        //    //return Json(result, serializerOptions);
+        //}
 
     }
 }
